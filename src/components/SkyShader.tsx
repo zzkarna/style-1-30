@@ -279,6 +279,70 @@ const SkyShader = () => {
           return c*c*.8;
       }
 
+      // Water constants
+      const float WATER_DEPTH = 1.0;
+      const float DRAG_MULT = 0.38;
+      const int ITERATIONS_RAYMARCH = 12;
+      const int ITERATIONS_NORMAL = 36;
+
+      vec2 wavedx(vec2 position, vec2 direction, float frequency, float timeshift) {
+        float x = dot(direction, position) * frequency + timeshift;
+        float wave = exp(sin(x) - 1.0);
+        float dx = wave * cos(x);
+        return vec2(wave, -dx);
+      }
+
+      float getwaves(vec2 position, int iterations) {
+        float phase = length(position) * 0.1;
+        float iter = 0.0;
+        float frequency = 1.0;
+        float timeMultiplier = 2.0;
+        float weight = 1.0;
+        float sumOfValues = 0.0;
+        float sumOfWeights = 0.0;
+        
+        for(int i=0; i < iterations; i++) {
+          vec2 p = vec2(sin(iter), cos(iter));
+          vec2 res = wavedx(position, p, frequency, time * timeMultiplier + phase);
+          
+          position += p * res.y * weight * DRAG_MULT;
+          
+          sumOfValues += res.x * weight;
+          sumOfWeights += weight;
+          
+          weight = mix(weight, 0.0, 0.2);
+          frequency *= 1.18;
+          timeMultiplier *= 1.07;
+          iter += 1232.399963;
+        }
+        return sumOfValues / sumOfWeights;
+      }
+
+      float raymarchwater(vec3 camera, vec3 start, vec3 end, float depth) {
+        vec3 pos = start;
+        vec3 dir = normalize(end - start);
+        for(int i=0; i < 64; i++) {
+          float height = getwaves(pos.xz, ITERATIONS_RAYMARCH) * depth - depth;
+          if(height + 0.01 > pos.y) {
+            return distance(pos, camera);
+          }
+          pos += dir * (pos.y - height);
+        }
+        return distance(start, camera);
+      }
+
+      vec3 normal_water(vec2 pos, float e, float depth) {
+        vec2 ex = vec2(e, 0);
+        float H = getwaves(pos.xy, ITERATIONS_NORMAL) * depth;
+        vec3 a = vec3(pos.x, H, pos.y);
+        return normalize(
+          cross(
+            a - vec3(pos.x - e, getwaves(pos.xy - ex.xy, ITERATIONS_NORMAL) * depth, pos.y),
+            a - vec3(pos.x, getwaves(pos.xy + ex.yx, ITERATIONS_NORMAL) * depth, pos.y + e)
+          )
+        );
+      }
+
       void main() {
           float AR = resolution.x/resolution.y;
           vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -303,31 +367,52 @@ const SkyShader = () => {
           float scatatt = 1.;
           vec3 star = vec3(0.);
           
-          float fade = smoothstep(0.,0.01,abs(D.y))*0.5+0.9;
-          staratt = 1. - min(1.0,(uvMouse.y*2.0));
-          scatatt = 1. - min(1.0,(uvMouse.y*2.2));
-          
+          // Water rendering
           if (D.y < -0.02) {
-              float L = -O.y / D.y;
-              O = O + D * L;
-              D.y = -D.y;
-              D = normalize(D+vec3(0.,.003*sin(time+6.2831*noise(O.xz+vec2(0.,-time*1e3))),0.));
-              att = .6;
-              star = stars(D);
+              vec3 waterPlaneHigh = vec3(0.0, -2.0, 0.0); // Adjusted position
+              vec3 waterPlaneLow = vec3(0.0, -2.0 - WATER_DEPTH, 0.0);
+              
+              float highPlaneHit = -(O.y - waterPlaneHigh.y) / D.y;
+              float lowPlaneHit = -(O.y - waterPlaneLow.y) / D.y;
+              
+              vec3 highHitPos = O + D * highPlaneHit;
+              vec3 lowHitPos = O + D * lowPlaneHit;
+              
+              float dist = raymarchwater(O, highHitPos, lowHitPos, WATER_DEPTH);
+              vec3 waterHitPos = O + D * dist;
+              
+              vec3 N = normal_water(waterHitPos.xz, 0.01, WATER_DEPTH);
+              N = mix(N, vec3(0.0, 1.0, 0.0), 0.8 * min(1.0, sqrt(dist*0.01) * 1.1));
+              
+              float fresnel = 0.04 + (1.0-0.04)*(pow(1.0 - max(0.0, dot(-N, D)), 5.0));
+              
+              vec3 R = normalize(reflect(D, N));
+              R.y = abs(R.y);
+              
+              vec3 reflection;
+              vec3 scattering = vec3(0.0293, 0.0698, 0.1717) * 0.1;
+              
+              // Use our existing sky color for reflection
+              scatter(O, R, reflection, scat);
+              color = fresnel * reflection + scattering;
           } else {
+              float fade = smoothstep(0.,0.01,abs(D.y))*0.5+0.9;
+              staratt = 1. - min(1.0,(uvMouse.y*2.0));
+              scatatt = 1. - min(1.0,(uvMouse.y*2.2));
+              
               float L1 = O.y / D.y;
               vec3 O1 = O + D * L1;
               vec3 D1 = normalize(D+vec3(1.,.0009*sin(time+6.2831*noise(O1.xz+vec2(0.,time*0.8))),0.));
               star = stars(D1);
+              
+              star *= att * staratt;
+              scatter(O, D, color, scat);
+              color *= att;
+              scat *= att * scatatt;
+              
+              color += scat;
+              color += star;
           }
-          
-          star *= att * staratt;
-          scatter(O, D, color, scat);
-          color *= att;
-          scat *= att * scatatt;
-          
-          color += scat;
-          color += star;
           
           gl_FragColor = vec4(pow(color, vec3(1.0/2.2)), 1.0);
       }
