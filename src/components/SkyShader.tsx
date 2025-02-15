@@ -185,9 +185,9 @@ const SkyShader = () => {
       }
 
       float density_func(vec3 pos, float h) {
-        vec3 p = pos * 0.00025 + vec3(0.0, 0.0, -time * 0.05); // Further reduced scale for even larger clouds
-        float dens = fbm_clouds(p * 0.832, 2.2434, 0.7, 0.6); // Adjusted noise parameters for more distinct formations
-        dens *= smoothstep(cld_coverage, cld_coverage + 0.12, dens); // Increased smoothstep range for more separation
+        vec3 p = pos * 0.00025 + vec3(0.0, 0.0, -time * 0.05);
+        float dens = fbm_clouds(p * 0.832, 2.2434, 0.7, 0.6);
+        dens *= smoothstep(cld_coverage, cld_coverage + 0.12, dens);
         return dens;
       }
 
@@ -197,9 +197,9 @@ const SkyShader = () => {
           mie = exp(-h/Hm);
 
           // Add cloud density
-          if (h > 3500.0 && h < 10000.0) { // Wider height range for more vertical variation
+          if (h > 3500.0 && h < 10000.0) {
               float cloud_density = density_func(pos, h);
-              mie += cloud_density * 0.3; // Reduced density multiplier for better separation
+              mie += cloud_density * 0.3;
           }
       }
 
@@ -280,53 +280,69 @@ const SkyShader = () => {
       }
 
       // Water constants
-      const float WATER_DEPTH = 2.0; // Increased depth for more pronounced waves
-      const float DRAG_MULT = 0.28; // Reduced drag for larger wave patterns
-      const int ITERATIONS_RAYMARCH = 12;
-      const int ITERATIONS_NORMAL = 36;
+      const float WATER_DEPTH = 2.0;
+      const float DRAG_MULT = 0.28;
+      const int ITERATIONS_RAYMARCH = 8;
+      const int ITERATIONS_NORMAL = 24;
 
       vec2 wavedx(vec2 position, vec2 direction, float frequency, float timeshift) {
         float x = dot(direction, position) * frequency + timeshift;
-        float wave = exp(sin(x) - 1.0);
+        float wave = 1.0 + sin(x) * 0.5;
         float dx = wave * cos(x);
         return vec2(wave, -dx);
       }
 
       float getwaves(vec2 position, int iterations) {
-        float phase = length(position) * 0.05; // Reduced phase multiplier for larger waves
+        float phase = length(position) * 0.05;
         float iter = 0.0;
-        float frequency = 0.5; // Reduced base frequency for larger waves
-        float timeMultiplier = 1.0; // Slower time movement
+        float frequency = 0.5;
+        float timeMultiplier = 1.0;
         float weight = 1.0;
         float sumOfValues = 0.0;
         float sumOfWeights = 0.0;
         
-        for(int i=0; i < iterations; i++) {
-          vec2 p = vec2(sin(iter), cos(iter));
-          vec2 res = wavedx(position * 0.5, p, frequency, time * timeMultiplier + phase); // Scaled position for larger waves
+        vec2 p = vec2(sin(iter), cos(iter));
+        vec2 res = wavedx(position * 0.5, p, frequency, time * timeMultiplier + phase);
+        position += p * res.y * weight * DRAG_MULT;
+        sumOfValues += res.x * weight;
+        sumOfWeights += weight;
+        
+        weight *= 0.8;
+        frequency *= 1.18;
+        timeMultiplier *= 1.07;
+        iter += 1232.399963;
+        
+        for(int i=1; i < iterations; i++) {
+          p = vec2(sin(iter), cos(iter));
+          res = wavedx(position * 0.5, p, frequency, time * timeMultiplier + phase);
           
-          position += p * res.y * weight * DRAG_MULT;
+          position += p * (res.y * weight * DRAG_MULT);
+          sumOfValues = sumOfValues + res.x * weight;
+          sumOfWeights = sumOfWeights + weight;
           
-          sumOfValues += res.x * weight;
-          sumOfWeights += weight;
-          
-          weight = mix(weight, 0.0, 0.2);
+          weight *= 0.8;
           frequency *= 1.18;
           timeMultiplier *= 1.07;
           iter += 1232.399963;
         }
-        return sumOfValues / sumOfWeights;
+        return sumOfValues / max(sumOfWeights, 0.001);
       }
 
       float raymarchwater(vec3 camera, vec3 start, vec3 end, float depth) {
         vec3 pos = start;
         vec3 dir = normalize(end - start);
-        for(int i=0; i < 64; i++) {
+        float dist = 0.0;
+        
+        for(int i=0; i < 32; i++) {
           float height = getwaves(pos.xz, ITERATIONS_RAYMARCH) * depth - depth;
-          if(height + 0.01 > pos.y) {
+          float delta = pos.y - height;
+          if(abs(delta) < 0.01) {
             return distance(pos, camera);
           }
-          pos += dir * (pos.y - height);
+          float step = max(abs(delta) * 0.5, 0.02);
+          pos += dir * step;
+          dist += step;
+          if(dist > distance(start, end)) break;
         }
         return distance(start, camera);
       }
@@ -335,12 +351,9 @@ const SkyShader = () => {
         vec2 ex = vec2(e, 0);
         float H = getwaves(pos.xy, ITERATIONS_NORMAL) * depth;
         vec3 a = vec3(pos.x, H, pos.y);
-        return normalize(
-          cross(
-            a - vec3(pos.x - e, getwaves(pos.xy - ex.xy, ITERATIONS_NORMAL) * depth, pos.y),
-            a - vec3(pos.x, getwaves(pos.xy + ex.yx, ITERATIONS_NORMAL) * depth, pos.y + e)
-          )
-        );
+        vec3 b = vec3(pos.x - e, getwaves(pos.xy - ex.xy, ITERATIONS_NORMAL) * depth, pos.y);
+        vec3 c = vec3(pos.x, getwaves(pos.xy + ex.yx, ITERATIONS_NORMAL) * depth, pos.y + e);
+        return normalize(cross(a - b, a - c));
       }
 
       void main() {
@@ -369,7 +382,7 @@ const SkyShader = () => {
           
           // Water rendering
           if (D.y < -0.02) {
-              vec3 waterPlaneHigh = vec3(0.0, -1.0, 0.0); // Raised water plane
+              vec3 waterPlaneHigh = vec3(0.0, -1.0, 0.0);
               vec3 waterPlaneLow = vec3(0.0, -1.0 - WATER_DEPTH, 0.0);
               
               float highPlaneHit = -(O.y - waterPlaneHigh.y) / D.y;
@@ -381,19 +394,21 @@ const SkyShader = () => {
               float dist = raymarchwater(O, highHitPos, lowHitPos, WATER_DEPTH);
               vec3 waterHitPos = O + D * dist;
               
-              vec3 N = normal_water(waterHitPos.xz * 0.3, 0.01, WATER_DEPTH); // Scaled position for normal calculation
-              N = mix(N, vec3(0.0, 1.0, 0.0), 0.8 * min(1.0, sqrt(dist*0.01) * 1.1));
+              vec3 N = normal_water(waterHitPos.xz * 0.3, 0.01, WATER_DEPTH);
+              float blendFactor = min(1.0, sqrt(dist*0.01) * 1.1);
+              N = mix(N, vec3(0.0, 1.0, 0.0), 0.8 * blendFactor);
               
-              float fresnel = 0.04 + (1.0-0.04)*(pow(1.0 - max(0.0, dot(-N, D)), 5.0));
+              float NdotD = max(0.0, dot(-N, D));
+              float fresnel = 0.04 + 0.96 * pow(1.0 - NdotD, 5.0);
               
-              vec3 R = normalize(reflect(D, N));
+              vec3 R = reflect(D, N);
               R.y = abs(R.y);
               
               vec3 reflection;
-              vec3 scattering = vec3(0.0293, 0.0698, 0.1717) * 0.15; // Increased scattering for better water color
+              vec3 scattering = vec3(0.0293, 0.0698, 0.1717) * 0.15;
               
               scatter(O, R, reflection, scat);
-              color = fresnel * reflection + scattering;
+              color = mix(scattering, reflection, fresnel);
           } else {
               float fade = smoothstep(0.,0.01,abs(D.y))*0.5+0.9;
               staratt = 1. - min(1.0,(uvMouse.y*2.0));
