@@ -280,8 +280,8 @@ const SkyShader = () => {
       }
 
       // Water constants
-      const float WATER_DEPTH = 1.0;
-      const float DRAG_MULT = 0.38;
+      const float WATER_DEPTH = 2.0; // Increased depth for more pronounced waves
+      const float DRAG_MULT = 0.28; // Reduced drag for larger wave patterns
       const int ITERATIONS_RAYMARCH = 12;
       const int ITERATIONS_NORMAL = 36;
 
@@ -293,17 +293,17 @@ const SkyShader = () => {
       }
 
       float getwaves(vec2 position, int iterations) {
-        float phase = length(position) * 0.1;
+        float phase = length(position) * 0.05; // Reduced phase multiplier for larger waves
         float iter = 0.0;
-        float frequency = 1.0;
-        float timeMultiplier = 2.0;
+        float frequency = 0.5; // Reduced base frequency for larger waves
+        float timeMultiplier = 1.0; // Slower time movement
         float weight = 1.0;
         float sumOfValues = 0.0;
         float sumOfWeights = 0.0;
         
         for(int i=0; i < iterations; i++) {
           vec2 p = vec2(sin(iter), cos(iter));
-          vec2 res = wavedx(position, p, frequency, time * timeMultiplier + phase);
+          vec2 res = wavedx(position * 0.5, p, frequency, time * timeMultiplier + phase); // Scaled position for larger waves
           
           position += p * res.y * weight * DRAG_MULT;
           
@@ -369,8 +369,8 @@ const SkyShader = () => {
           
           // Water rendering
           if (D.y < -0.02) {
-              vec3 waterPlaneHigh = vec3(0.0, -2.0, 0.0); // Adjusted position
-              vec3 waterPlaneLow = vec3(0.0, -2.0 - WATER_DEPTH, 0.0);
+              vec3 waterPlaneHigh = vec3(0.0, -1.0, 0.0); // Raised water plane
+              vec3 waterPlaneLow = vec3(0.0, -1.0 - WATER_DEPTH, 0.0);
               
               float highPlaneHit = -(O.y - waterPlaneHigh.y) / D.y;
               float lowPlaneHit = -(O.y - waterPlaneLow.y) / D.y;
@@ -381,7 +381,7 @@ const SkyShader = () => {
               float dist = raymarchwater(O, highHitPos, lowHitPos, WATER_DEPTH);
               vec3 waterHitPos = O + D * dist;
               
-              vec3 N = normal_water(waterHitPos.xz, 0.01, WATER_DEPTH);
+              vec3 N = normal_water(waterHitPos.xz * 0.3, 0.01, WATER_DEPTH); // Scaled position for normal calculation
               N = mix(N, vec3(0.0, 1.0, 0.0), 0.8 * min(1.0, sqrt(dist*0.01) * 1.1));
               
               float fresnel = 0.04 + (1.0-0.04)*(pow(1.0 - max(0.0, dot(-N, D)), 5.0));
@@ -390,9 +390,8 @@ const SkyShader = () => {
               R.y = abs(R.y);
               
               vec3 reflection;
-              vec3 scattering = vec3(0.0293, 0.0698, 0.1717) * 0.1;
+              vec3 scattering = vec3(0.0293, 0.0698, 0.1717) * 0.15; // Increased scattering for better water color
               
-              // Use our existing sky color for reflection
               scatter(O, R, reflection, scat);
               color = fresnel * reflection + scattering;
           } else {
