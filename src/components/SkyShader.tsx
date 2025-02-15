@@ -76,9 +76,9 @@ const SkyShader = () => {
 
       // Cloud constants
       const int cld_march_steps = 50;
-      const float cld_coverage = 0.4125; // Increased coverage threshold for larger formations
-      const float cld_thick = 120.0; // Increased thickness
-      const float cld_absorb_coeff = 0.8; // Reduced absorption for better visibility
+      const float cld_coverage = 0.5825; // Higher threshold for fewer, more distinct clouds
+      const float cld_thick = 150.0; // Increased thickness for larger clouds
+      const float cld_absorb_coeff = 0.6; // Further reduced absorption for better visibility
 
       vec3 bM = vec3(21e-6);
       vec3 bR = vec3(5.8e-6, 13.5e-6, 33.1e-6);
@@ -185,9 +185,9 @@ const SkyShader = () => {
       }
 
       float density_func(vec3 pos, float h) {
-        vec3 p = pos * 0.0005 + vec3(0.0, 0.0, -time * 0.1); // Reduced scale for larger clouds
-        float dens = fbm_clouds(p * 1.032, 2.2434, 0.6, 0.6); // Adjusted noise parameters
-        dens *= smoothstep(cld_coverage, cld_coverage + 0.08, dens); // Increased smoothstep range for softer edges
+        vec3 p = pos * 0.00025 + vec3(0.0, 0.0, -time * 0.05); // Further reduced scale for even larger clouds
+        float dens = fbm_clouds(p * 0.832, 2.2434, 0.7, 0.6); // Adjusted noise parameters for more distinct formations
+        dens *= smoothstep(cld_coverage, cld_coverage + 0.12, dens); // Increased smoothstep range for more separation
         return dens;
       }
 
@@ -197,9 +197,9 @@ const SkyShader = () => {
           mie = exp(-h/Hm);
 
           // Add cloud density
-          if (h > 4000.0 && h < 9000.0) { // Increased height range for larger clouds
+          if (h > 3500.0 && h < 10000.0) { // Wider height range for more vertical variation
               float cloud_density = density_func(pos, h);
-              mie += cloud_density * 0.4; // Reduced density multiplier
+              mie += cloud_density * 0.3; // Reduced density multiplier for better separation
           }
       }
 
