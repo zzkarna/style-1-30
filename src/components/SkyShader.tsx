@@ -405,24 +405,49 @@ const SkyShader = () => {
               R.y = abs(R.y);
               
               vec3 reflection;
-              vec3 scattering = vec3(0.0293, 0.0698, 0.1717) * 0.15;
+              vec3 reflectionScat = vec3(0.0); // Separate scattering for reflection
+              vec3 reflectionStar = vec3(0.0); // Stars in reflection
               
-              scatter(O, R, reflection, scat);
-              color = mix(scattering, reflection, fresnel);
+              // Calculate reflection components with same attenuation as sky
+              float reflectionFade = smoothstep(0., 0.01, abs(R.y)) * 0.5 + 0.9;
+              float reflectionStarAtt = 1.0 - min(1.0, (uvMouse.y * 2.0));
+              float reflectionScatAtt = 1.0 - min(1.0, (uvMouse.y * 2.2));
+              
+              // Apply sky calculations to reflection
+              if (R.y > 0.0) {
+                  float L1 = O.y / R.y;
+                  vec3 O1 = O + R * L1;
+                  vec3 R1 = normalize(R + vec3(1., .0009 * sin(time + 6.2831 * noise(O1.xz + vec2(0., time * 0.8))), 0.));
+                  reflectionStar = stars(R1);
+                  
+                  reflectionStar *= att * reflectionStarAtt;
+                  scatter(O, R, reflection, reflectionScat);
+                  reflection *= att * 0.7; // Base reflection attenuation
+                  reflectionScat *= att * reflectionScatAtt * 0.6; // Scattering attenuation
+                  
+                  reflection += reflectionScat;
+                  reflection += reflectionStar;
+              }
+              
+              // Water scattering parameters
+              vec3 waterScattering = vec3(0.0293, 0.0698, 0.1717) * 0.15;
+              
+              // Combine reflection and scattering with fresnel
+              color = mix(waterScattering, reflection, fresnel);
           } else {
-              float fade = smoothstep(0.,0.01,abs(D.y))*0.5+0.9;
-              staratt = 1. - min(1.0,(uvMouse.y*2.0));
-              scatatt = 1. - min(1.0,(uvMouse.y*2.2));
+              float fade = smoothstep(0., 0.01, abs(D.y)) * 0.5 + 0.9;
+              staratt = 1.0 - min(1.0, (uvMouse.y * 2.0));
+              scatatt = 1.0 - min(1.0, (uvMouse.y * 2.2));
               
               float L1 = O.y / D.y;
               vec3 O1 = O + D * L1;
-              vec3 D1 = normalize(D+vec3(1.,.0009*sin(time+6.2831*noise(O1.xz+vec2(0.,time*0.8))),0.));
+              vec3 D1 = normalize(D + vec3(1., .0009 * sin(time + 6.2831 * noise(O1.xz + vec2(0., time * 0.8))), 0.));
               star = stars(D1);
               
               star *= att * staratt;
               scatter(O, D, color, scat);
-              color *= att;
-              scat *= att * scatatt;
+              color *= att * 0.7; // Matched with reflection attenuation
+              scat *= att * scatatt * 0.6; // Matched with reflection scattering
               
               color += scat;
               color += star;
