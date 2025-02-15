@@ -61,22 +61,8 @@ const SkyShader = () => {
       
       varying vec2 vUv;
 
-      #define ORIG_CLOUD 0
-      #define ENABLE_RAIN 0
-      #define SIMPLE_SUN 0
-      #define NICE_HACK_SUN 1
-      #define SOFT_SUN 1
-      #define cloudy 0.7
-      #define haze 0.01 * (cloudy*20.)
-      #define rainmulti 5.0
-      #define rainy (10.0 -rainmulti)
       #define fov tan(radians(60.0))
       #define cameraheight 5e1
-      #define mincloudheight 5e3
-      #define maxcloudheight 8e3
-      #define cloudnoise 2e-4
-      #define cloudnear 1.0
-      #define cloudfar 70e3
 
       const float R0 = 6360e3;
       const float Ra = 6380e3;
@@ -102,51 +88,10 @@ const SkyShader = () => {
           return texture2D(noiseTexture, (v + 0.5) / 256.0).r;
       }
 
-      float Noise(in vec3 x) {
-          vec3 p = floor(x);
-          vec3 f = fract(x);
-          f = f*f*(3.0-2.0*f);
-          vec2 uv = (p.xy+vec2(37.0,17.0)*p.z) + f.xy;
-          vec2 rg = texture2D(noiseTexture, (uv+ 0.5)/256.0).yx;
-          return mix(rg.x, rg.y, f.z);
-      }
-
-      float fnoise(vec3 p, in float t) {
-          p *= .25;
-          float f;
-          f = 0.5000 * Noise(p); p = p * 3.02; p.y -= t*.1;
-          f += 0.2500 * Noise(p); p = p * 3.03; p.y += t*.06;
-          f += 0.1250 * Noise(p); p = p * 3.01;
-          f += 0.0625 * Noise(p);
-          return f;
-      }
-
-      float cloud(vec3 p, in float t) {
-          float cld = fnoise(p*cloudnoise,t) + cloudy*0.1;
-          cld = smoothstep(.4+.04, .6+.04, cld);
-          cld *= cld * (5.0*rainmulti);
-          return cld+haze;
-      }
-
       void densities(in vec3 pos, out float rayleigh, out float mie) {
           float h = length(pos - C) - R0;
           rayleigh = exp(-h/Hr);
-          vec3 d = pos;
-          d.y = 0.0;
-          float dist = length(d);
-          
-          float cld = 0.;
-          if (mincloudheight < h && h < maxcloudheight) {
-              cld = cloud(pos+vec3(time*5e2,0.,time*6e2),time)*cloudy;
-              cld *= sin(3.1415*(h-mincloudheight)/mincloudheight) * cloudy;
-          }
-          
-          if (dist > cloudfar) {
-              float factor = clamp(1.0-((dist - cloudfar)/(cloudfar-cloudnear)),0.0,1.0);
-              cld *= factor;
-          }
-          
-          mie = exp(-h/Hm) + cld + haze;
+          mie = exp(-h/Hm);
       }
 
       float escape(in vec3 p, in vec3 d, in float R) {
