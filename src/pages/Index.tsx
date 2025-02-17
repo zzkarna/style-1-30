@@ -1,4 +1,3 @@
-
 import SkyShader from "@/components/SkyShader";
 import { Search, User, ShoppingBag, Facebook, Instagram, Twitter } from 'lucide-react';
 import EllaNav from "@/components/EllaNav";
@@ -7,28 +6,23 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-black flex flex-col">
       {/* Top Navigation Bar */}
-      <nav className="w-full bg-black p-4">
+      <nav className="w-full bg-black px-8 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="w-1/3">
-            <EllaNav />
+          <div className="w-1/3 flex gap-6">
+            <button className="text-sm text-white hover:text-gray-300">Shop</button>
+            <button className="text-sm text-white hover:text-gray-300">Archive</button>
           </div>
           <div className="w-1/3 flex justify-center">
             <img 
               src="/lovable-uploads/a5d84068-b2d2-428c-9771-6c6632ed32e5.png" 
               alt="Logo" 
-              className="h-24 w-auto" // Increased from h-16 to h-24
+              className="h-24 w-auto"
             />
           </div>
           <div className="w-1/3 flex justify-end gap-6">
-            <button className="p-2 hover:bg-gray-800 rounded-md">
-              <Search size={24} className="text-white" />
-            </button>
-            <button className="p-2 hover:bg-gray-800 rounded-md">
-              <User size={24} className="text-white" />
-            </button>
-            <button className="p-2 hover:bg-gray-800 rounded-md">
-              <ShoppingBag size={24} className="text-white" />
-            </button>
+            <button className="text-sm text-white hover:text-gray-300">Search</button>
+            <button className="text-sm text-white hover:text-gray-300">Account</button>
+            <button className="text-sm text-white hover:text-gray-300">Cart (0)</button>
           </div>
         </div>
       </nav>
