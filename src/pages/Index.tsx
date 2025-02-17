@@ -35,54 +35,53 @@ const Index = () => {
 
       {/* Bottom Bar */}
       <div className="w-full bg-black p-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-8">
-          {/* Explore Section */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold mb-4 text-white">EXPLORE</h2>
-            <div className="space-y-2 text-sm">
-              <button className="block text-white hover:text-blue-400 transition-colors">Size Guide</button>
-              <button className="block text-white hover:text-blue-400 transition-colors">Contact Us</button>
-              <button className="block text-white hover:text-blue-400 transition-colors">Store Locations</button>
-              <button className="block text-white hover:text-blue-400 transition-colors">Policy</button>
-              <button className="block text-white hover:text-blue-400 transition-colors">Refund policy</button>
-              <button className="block text-white hover:text-blue-400 transition-colors">FAQ</button>
-            </div>
+        <div className="max-w-7xl mx-auto mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-2">NEVER MISS A DROP</h2>
+          <p className="text-white text-center mb-6">Subscribe and get the latest news.</p>
+          <div className="flex max-w-lg mx-auto">
+            <input 
+              type="email" 
+              placeholder="Enter your email address"
+              className="flex-1 p-2 border border-gray-700 bg-black text-white"
+            />
+            <button className="px-4 py-2 bg-black border border-l-0 border-gray-700 text-white">
+              →
+            </button>
           </div>
+        </div>
 
-          {/* Connect With Us Section */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold mb-4 text-white">CONNECT WITH US</h2>
-            <div className="flex flex-col space-y-4">
-              <div className="flex">
-                <input 
-                  type="email" 
-                  placeholder="Join our mailing list"
-                  className="flex-1 p-2 border border-gray-700 bg-black text-white rounded-l"
-                />
-                <button className="px-4 py-2 bg-white text-black rounded-r hover:bg-gray-200">
-                  JOIN
-                </button>
-              </div>
-              <div className="flex gap-4 mt-4">
-                <a href="#" className="text-white hover:text-blue-400">
-                  <Facebook size={20} />
-                </a>
-                <a href="#" className="text-white hover:text-blue-400">
-                  <Instagram size={20} />
-                </a>
-                <a href="#" className="text-white hover:text-blue-400">
-                  <Twitter size={20} />
-                </a>
-              </div>
-            </div>
-          </div>
+        {/* Links */}
+        <div className="flex justify-center items-center space-x-4 text-sm text-white mb-8">
+          <button className="hover:text-gray-400">SIZE GUIDE</button>
+          <span className="text-gray-600">•</span>
+          <button className="hover:text-gray-400">PRIVACY</button>
+          <span className="text-gray-600">•</span>
+          <button className="hover:text-gray-400">TERMS</button>
+          <span className="text-gray-600">•</span>
+          <button className="hover:text-gray-400">FAQ</button>
+          <span className="text-gray-600">•</span>
+          <button className="hover:text-gray-400">TERMS OF SERVICE</button>
+          <span className="text-gray-600">•</span>
+          <button className="hover:text-gray-400">REFUND POLICY</button>
+          <span className="text-gray-600">•</span>
+          <button className="hover:text-gray-400">DO NOT SELL MY PERSONAL INFORMATION</button>
+        </div>
+
+        {/* Social Links */}
+        <div className="flex justify-center space-x-6 mb-8">
+          <a href="#" className="text-white hover:text-gray-400">INSTAGRAM</a>
+          <a href="#" className="text-white hover:text-gray-400">TWITTER</a>
+          <a href="#" className="text-white hover:text-gray-400">FACEBOOK</a>
         </div>
         
         {/* Copyright */}
-        <div className="max-w-7xl mx-auto mt-8 pt-4 border-t border-gray-800 flex justify-between items-center text-sm text-white">
-          <p>© 2025 us.bape.com</p>
-          <button className="flex items-center gap-2">
-            🇺🇸 USD $
+        <div className="max-w-7xl mx-auto flex justify-between items-center text-xs text-gray-400 border-t border-gray-800 pt-8">
+          <div>
+            <p>Copyright ©2024 NOCTA.</p>
+            <p>All rights reserved.</p>
+          </div>
+          <button className="border border-gray-700 px-4 py-2 text-white">
+            United States (USD)
           </button>
         </div>
       </div>
