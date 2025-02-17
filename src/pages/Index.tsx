@@ -25,8 +25,8 @@ const Index = () => {
       </nav>
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="relative w-[400px] h-[300px] shadow-2xl">
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="relative w-[800px] h-[500px] border-[8px] border-black rounded-sm overflow-hidden">
           <SkyShader />
         </div>
       </div>
