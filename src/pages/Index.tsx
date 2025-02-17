@@ -10,8 +10,8 @@ const Index = () => {
       <nav className="w-full bg-black px-8 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="w-1/3 flex gap-6">
-            <button className="text-sm text-white hover:text-gray-300">Shop</button>
-            <button className="text-sm text-white hover:text-gray-300">Archive</button>
+            <button className="text-sm text-white hover:text-gray-300">shop</button>
+            <button className="text-sm text-white hover:text-gray-300">archive</button>
           </div>
           <div className="w-1/3 flex justify-center flex-col items-center">
             <img 
@@ -22,9 +22,9 @@ const Index = () => {
             <EllaNav />
           </div>
           <div className="w-1/3 flex justify-end gap-6">
-            <button className="text-sm text-white hover:text-gray-300">Search</button>
-            <button className="text-sm text-white hover:text-gray-300">Account</button>
-            <button className="text-sm text-white hover:text-gray-300">Cart (0)</button>
+            <button className="text-sm text-white hover:text-gray-300">search</button>
+            <button className="text-sm text-white hover:text-gray-300">account</button>
+            <button className="text-sm text-white hover:text-gray-300">cart (0)</button>
           </div>
         </div>
       </nav>
@@ -41,12 +41,12 @@ const Index = () => {
       {/* Bottom Bar */}
       <div className="w-full bg-black p-8">
         <div className="max-w-7xl mx-auto mb-12">
-          <h2 className="text-2xl font-bold text-white text-center mb-2">NEVER MISS A DROP</h2>
-          <p className="text-white text-center mb-6">Subscribe and get the latest news.</p>
+          <h2 className="text-2xl font-bold text-white text-center mb-2">never miss a drop</h2>
+          <p className="text-white text-center mb-6">subscribe and get the latest news.</p>
           <div className="flex max-w-lg mx-auto">
             <input 
               type="email" 
-              placeholder="Enter your email address"
+              placeholder="enter your email address"
               className="flex-1 p-2 border border-gray-700 bg-black text-white"
             />
             <button className="px-4 py-2 bg-black border border-l-0 border-gray-700 text-white">
@@ -57,36 +57,36 @@ const Index = () => {
 
         {/* Links */}
         <div className="flex justify-center items-center space-x-4 text-sm text-white mb-8">
-          <button className="hover:text-gray-400">SIZE GUIDE</button>
+          <button className="hover:text-gray-400">size guide</button>
           <span className="text-gray-600">•</span>
-          <button className="hover:text-gray-400">PRIVACY</button>
+          <button className="hover:text-gray-400">privacy</button>
           <span className="text-gray-600">•</span>
-          <button className="hover:text-gray-400">TERMS</button>
+          <button className="hover:text-gray-400">terms</button>
           <span className="text-gray-600">•</span>
-          <button className="hover:text-gray-400">FAQ</button>
+          <button className="hover:text-gray-400">faq</button>
           <span className="text-gray-600">•</span>
-          <button className="hover:text-gray-400">TERMS OF SERVICE</button>
+          <button className="hover:text-gray-400">terms of service</button>
           <span className="text-gray-600">•</span>
-          <button className="hover:text-gray-400">REFUND POLICY</button>
+          <button className="hover:text-gray-400">refund policy</button>
           <span className="text-gray-600">•</span>
-          <button className="hover:text-gray-400">DO NOT SELL MY PERSONAL INFORMATION</button>
+          <button className="hover:text-gray-400">do not sell my personal information</button>
         </div>
 
         {/* Social Links */}
         <div className="flex justify-center space-x-6 mb-8">
-          <a href="#" className="text-white hover:text-gray-400">INSTAGRAM</a>
-          <a href="#" className="text-white hover:text-gray-400">TWITTER</a>
-          <a href="#" className="text-white hover:text-gray-400">FACEBOOK</a>
+          <a href="#" className="text-white hover:text-gray-400">instagram</a>
+          <a href="#" className="text-white hover:text-gray-400">twitter</a>
+          <a href="#" className="text-white hover:text-gray-400">facebook</a>
         </div>
         
         {/* Copyright */}
         <div className="max-w-7xl mx-auto flex justify-between items-center text-xs text-gray-400 border-t border-gray-800 pt-8">
           <div>
-            <p>Copyright ©2024 NOCTA.</p>
-            <p>All rights reserved.</p>
+            <p>copyright ©2024 nocta.</p>
+            <p>all rights reserved.</p>
           </div>
           <button className="border border-gray-700 px-4 py-2 text-white">
-            United States (USD)
+            united states (usd)
           </button>
         </div>
       </div>
