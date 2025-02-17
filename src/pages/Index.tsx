@@ -11,7 +11,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto flex justify-between items-end pb-4">
           <div className="w-1/3 flex gap-6">
             <button className="text-sm text-white hover:text-gray-300">shop</button>
-            <button className="text-sm text-white hover:text-gray-300">archive</button>
+            <button className="text-sm text-white hover:text-gray-300">gallery</button>
           </div>
           <div className="w-1/3 flex justify-center flex-col items-center">
             <img 
@@ -22,9 +22,9 @@ const Index = () => {
             <EllaNav />
           </div>
           <div className="w-1/3 flex justify-end gap-6">
-            <button className="text-sm text-white hover:text-gray-300">search</button>
-            <button className="text-sm text-white hover:text-gray-300">account</button>
-            <button className="text-sm text-white hover:text-gray-300">cart (0)</button>
+            <button className="text-sm text-white hover:text-gray-300">explore</button>
+            <button className="text-sm text-white hover:text-gray-300">profile</button>
+            <button className="text-sm text-white hover:text-gray-300">bag (0)</button>
           </div>
         </div>
       </nav>
