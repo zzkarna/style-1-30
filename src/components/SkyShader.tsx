@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -256,17 +257,15 @@ const SkyShader = () => {
                   }
                   
                   vec3 A = exp(-(bR * (depthRs + depthR) + bM * (depthMs + depthM)));
-                  R += A * dR * 1.2;
-                  M += A * dM * 1.1;
+                  R += A * dR;
+                  M += A * dM;
               }
           }
           
-          col = I * 1.2 * (M * bM * phaseM);
-          col += SI * 1.3 * (M * bM * phaseS);
-          col += I * 1.1 * (R * bR * phaseR);
-          
-          col += vec3(0.1, 0.05, 0.2) * depthM;
-          scat = 0.15 * (bM * depthM);
+          col = I * (M * bM * phaseM);
+          col += SI * (M * bM * phaseS);
+          col += I * (R * bR * phaseR);
+          scat = 0.1 * (bM * depthM);
       }
 
       vec3 stars(in vec3 p) {
@@ -411,13 +410,15 @@ const SkyShader = () => {
               R.y = abs(R.y);
               
               vec3 reflection;
-              vec3 reflectionScat = vec3(0.0);
-              vec3 reflectionStar = vec3(0.0);
+              vec3 reflectionScat = vec3(0.0); // Separate scattering for reflection
+              vec3 reflectionStar = vec3(0.0); // Stars in reflection
               
+              // Calculate reflection components with same attenuation as sky
               float reflectionFade = smoothstep(0., 0.01, abs(R.y)) * 0.5 + 0.9;
               float reflectionStarAtt = 1.0 - min(1.0, (uvMouse.y * 2.0));
               float reflectionScatAtt = 1.0 - min(1.0, (uvMouse.y * 2.2));
               
+              // Apply sky calculations to reflection
               if (R.y > 0.0) {
                   float L1 = O.y / R.y;
                   vec3 O1 = O + R * L1;
@@ -426,15 +427,17 @@ const SkyShader = () => {
                   
                   reflectionStar *= att * reflectionStarAtt;
                   scatter(O, R, reflection, reflectionScat);
-                  reflection *= att * 0.7;
-                  reflectionScat *= att * reflectionScatAtt * 0.6;
+                  reflection *= att * 0.7; // Base reflection attenuation
+                  reflectionScat *= att * reflectionScatAtt * 0.6; // Scattering attenuation
                   
                   reflection += reflectionScat;
                   reflection += reflectionStar;
               }
               
-              vec3 waterScattering = vec3(0.0293, 0.0898, 0.2717) * 0.2;
+              // Water scattering parameters
+              vec3 waterScattering = vec3(0.0293, 0.0698, 0.1717) * 0.15;
               
+              // Combine reflection and scattering with fresnel
               color = mix(waterScattering, reflection, fresnel);
           } else {
               float fade = smoothstep(0., 0.01, abs(D.y)) * 0.5 + 0.9;
@@ -448,16 +451,14 @@ const SkyShader = () => {
               
               star *= att * staratt;
               scatter(O, D, color, scat);
-              color *= att * 0.85;
-              scat *= att * scatatt * 0.7;
+              color *= att * 0.7; // Matched with reflection attenuation
+              scat *= att * scatatt * 0.6; // Matched with reflection scattering
               
-              color += scat * 1.2;
-              color += star * 1.1;
+              color += scat;
+              color += star;
           }
           
-          color = pow(color * 1.1, vec3(1.0/2.2));
-          
-          gl_FragColor = vec4(color, 1.0);
+          gl_FragColor = vec4(pow(color, vec3(1.0/2.2)), 1.0);
       }
     `;
 
@@ -524,7 +525,7 @@ const SkyShader = () => {
     // Animation loop
     const clock = new THREE.Clock();
     function animate() {
-      uniforms.time.value = clock.getElapsedTime() * 0.8;
+      uniforms.time.value = clock.getElapsedTime();
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
