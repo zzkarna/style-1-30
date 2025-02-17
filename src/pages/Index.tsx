@@ -1,3 +1,4 @@
+
 import SkyShader from "@/components/SkyShader";
 import { Search, User, ShoppingBag, Facebook, Instagram, Twitter } from 'lucide-react';
 import EllaNav from "@/components/EllaNav";
@@ -12,12 +13,13 @@ const Index = () => {
             <button className="text-sm text-white hover:text-gray-300">Shop</button>
             <button className="text-sm text-white hover:text-gray-300">Archive</button>
           </div>
-          <div className="w-1/3 flex justify-center">
+          <div className="w-1/3 flex justify-center flex-col items-center">
             <img 
               src="/lovable-uploads/a5d84068-b2d2-428c-9771-6c6632ed32e5.png" 
               alt="Logo" 
               className="h-24 w-auto"
             />
+            <EllaNav />
           </div>
           <div className="w-1/3 flex justify-end gap-6">
             <button className="text-sm text-white hover:text-gray-300">Search</button>
