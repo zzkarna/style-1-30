@@ -9,8 +9,17 @@ const Index = () => {
       {/* Top Navigation Bar */}
       <nav className="w-full bg-black p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <EllaNav />
-          <div className="flex gap-6">
+          <div className="w-1/3">
+            <EllaNav />
+          </div>
+          <div className="w-1/3 flex justify-center">
+            <img 
+              src="/lovable-uploads/a5d84068-b2d2-428c-9771-6c6632ed32e5.png" 
+              alt="Logo" 
+              className="h-12 w-auto"
+            />
+          </div>
+          <div className="w-1/3 flex justify-end gap-6">
             <button className="p-2 hover:bg-gray-800 rounded-md">
               <Search size={24} className="text-white" />
             </button>
