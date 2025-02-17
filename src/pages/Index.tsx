@@ -1,6 +1,7 @@
 
 import SkyShader from "@/components/SkyShader";
 import { Info, Image, Settings, Share2, Download, HelpCircle, Copyright } from 'lucide-react';
+import EllaNav from "@/components/EllaNav";
 
 const Index = () => {
   return (
@@ -8,7 +9,7 @@ const Index = () => {
       {/* Top Navigation Bar */}
       <nav className="w-full bg-gray-100 p-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-3xl font-bold" style={{ fontFamily: 'Bebas Neue Bitter' }}>ella</h1>
+          <EllaNav />
           <div className="flex gap-6">
             <button className="p-2 hover:bg-gray-200 rounded-md">
               <Info size={24} />
