@@ -16,7 +16,7 @@ const Index = () => {
             <img 
               src="/lovable-uploads/a5d84068-b2d2-428c-9771-6c6632ed32e5.png" 
               alt="Logo" 
-              className="h-16 w-auto" // Increased from h-12 to h-16
+              className="h-24 w-auto" // Increased from h-16 to h-24
             />
           </div>
           <div className="w-1/3 flex justify-end gap-6">
