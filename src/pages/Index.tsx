@@ -8,7 +8,7 @@ const Index = () => {
     <div className="min-h-screen bg-black flex flex-col">
       {/* Top Navigation Bar */}
       <nav className="w-full bg-black px-8 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="max-w-7xl mx-auto flex justify-between items-end pb-4">
           <div className="w-1/3 flex gap-6">
             <button className="text-sm text-white hover:text-gray-300">shop</button>
             <button className="text-sm text-white hover:text-gray-300">archive</button>
@@ -17,7 +17,7 @@ const Index = () => {
             <img 
               src="/lovable-uploads/a5d84068-b2d2-428c-9771-6c6632ed32e5.png" 
               alt="Logo" 
-              className="h-24 w-auto"
+              className="h-24 w-auto mb-2"
             />
             <EllaNav />
           </div>
