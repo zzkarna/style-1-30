@@ -537,27 +537,15 @@ const SkyShader = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="relative">
-        {/* Frame container */}
-        <div 
-          className="absolute inset-0 w-[1000px] h-[800px] bg-contain bg-center bg-no-repeat"
-          style={{ 
-            backgroundImage: 'url(/lovable-uploads/14840077-3b96-463d-9c8b-070733523f42.png)',
-            transform: 'scale(1.02)', // Slightly larger to avoid any gaps
-          }}
-        />
-        
-        {/* Shader container */}
-        <div 
-          ref={containerRef}
-          className="relative z-10 m-[100px]" // Margin to position shader within frame
-          style={{ 
-            width: '800px', 
-            height: '600px'
-          }}
-        />
-      </div>
+    <div className="flex items-center justify-center">
+      <div 
+        ref={containerRef}
+        className="relative"
+        style={{ 
+          width: '800px', 
+          height: '600px'
+        }}
+      />
     </div>
   );
 };
