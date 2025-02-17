@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -26,8 +27,12 @@ const SkyShader = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
+    // Set fixed size for the box
+    const WIDTH = 600;
+    const HEIGHT = 400;
+    
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(WIDTH, HEIGHT);
     containerRef.current.appendChild(renderer.domElement);
 
     // Create noise texture
@@ -37,7 +42,7 @@ const SkyShader = () => {
     // Shader uniforms
     const uniforms = {
       time: { value: 0.0 },
-      resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+      resolution: { value: new THREE.Vector2(WIDTH, HEIGHT) },
       mouse: { value: new THREE.Vector2(0.5, 0.5) },
       noiseTexture: { value: noiseTexture }
     };
@@ -478,23 +483,23 @@ const SkyShader = () => {
     }
     animate();
 
-    // Handle window resize
-    const handleResize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
-    };
+    // Handle window resize - removed as we're using fixed size
 
-    window.addEventListener('resize', handleResize);
-
-    // Mouse handling for click-only sun movement
+    // Mouse handling with coordinate translation
     let isMouseDown = false;
 
     const handleMouseDown = (event: MouseEvent) => {
-      isMouseDown = true;
-      uniforms.mouse.value.set(
-        event.clientX / window.innerWidth,
-        1.0 - event.clientY / window.innerHeight
-      );
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      if (x >= 0 && x <= WIDTH && y >= 0 && y <= HEIGHT) {
+        isMouseDown = true;
+        uniforms.mouse.value.set(
+          x / WIDTH,
+          1.0 - y / HEIGHT
+        );
+      }
     };
 
     const handleMouseUp = () => {
@@ -503,9 +508,13 @@ const SkyShader = () => {
 
     const handleMouseMove = (event: MouseEvent) => {
       if (isMouseDown) {
+        const rect = renderer.domElement.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
         uniforms.mouse.value.set(
-          event.clientX / window.innerWidth,
-          1.0 - event.clientY / window.innerHeight
+          x / WIDTH,
+          1.0 - y / HEIGHT
         );
       }
     };
@@ -516,7 +525,6 @@ const SkyShader = () => {
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -525,18 +533,18 @@ const SkyShader = () => {
         containerRef.current.removeChild(renderer.domElement);
       }
       
-      geometry.dispose();
-      material.dispose();
       renderer.dispose();
     };
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed top-0 left-0 w-full h-full z-[-1]"
-      style={{ overflow: 'hidden' }}
-    />
+    <div className="flex items-center justify-center min-h-screen">
+      <div 
+        ref={containerRef}
+        className="rounded-lg overflow-hidden shadow-lg"
+        style={{ width: '600px', height: '400px' }}
+      />
+    </div>
   );
 };
 
