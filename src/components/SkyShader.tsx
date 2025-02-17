@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -27,9 +26,9 @@ const SkyShader = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
 
-    // Set fixed size for the box
-    const WIDTH = 600;
-    const HEIGHT = 400;
+    // Set fixed size for the box - adjusted to match frame proportions
+    const WIDTH = 800;
+    const HEIGHT = 600;
     
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
@@ -538,12 +537,27 @@ const SkyShader = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div 
-        ref={containerRef}
-        className="rounded-lg overflow-hidden shadow-lg"
-        style={{ width: '600px', height: '400px' }}
-      />
+    <div className="flex items-center justify-center min-h-screen bg-black">
+      <div className="relative">
+        {/* Frame container */}
+        <div 
+          className="absolute inset-0 w-[1000px] h-[800px] bg-contain bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: 'url(/lovable-uploads/14840077-3b96-463d-9c8b-070733523f42.png)',
+            transform: 'scale(1.02)', // Slightly larger to avoid any gaps
+          }}
+        />
+        
+        {/* Shader container */}
+        <div 
+          ref={containerRef}
+          className="relative z-10 m-[100px]" // Margin to position shader within frame
+          style={{ 
+            width: '800px', 
+            height: '600px'
+          }}
+        />
+      </div>
     </div>
   );
 };
