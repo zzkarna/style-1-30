@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -26,13 +25,9 @@ const SkyShader = () => {
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
-
-    // Set fixed size for the box
-    const WIDTH = 600;
-    const HEIGHT = 400;
     
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(WIDTH, HEIGHT);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     containerRef.current.appendChild(renderer.domElement);
 
     // Create noise texture
@@ -42,7 +37,7 @@ const SkyShader = () => {
     // Shader uniforms
     const uniforms = {
       time: { value: 0.0 },
-      resolution: { value: new THREE.Vector2(WIDTH, HEIGHT) },
+      resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       mouse: { value: new THREE.Vector2(0.5, 0.5) },
       noiseTexture: { value: noiseTexture }
     };
@@ -474,6 +469,42 @@ const SkyShader = () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
+    // Handle window resize
+    const handleResize = () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Mouse handling
+    let isMouseDown = false;
+
+    const handleMouseDown = (event: MouseEvent) => {
+      isMouseDown = true;
+      uniforms.mouse.value.set(
+        event.clientX / window.innerWidth,
+        1.0 - event.clientY / window.innerHeight
+      );
+    };
+
+    const handleMouseUp = () => {
+      isMouseDown = false;
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (isMouseDown) {
+        uniforms.mouse.value.set(
+          event.clientX / window.innerWidth,
+          1.0 - event.clientY / window.innerHeight
+        );
+      }
+    };
+
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mousemove', handleMouseMove);
+
     // Animation loop
     const clock = new THREE.Clock();
     function animate() {
@@ -483,48 +514,9 @@ const SkyShader = () => {
     }
     animate();
 
-    // Handle window resize - removed as we're using fixed size
-
-    // Mouse handling with coordinate translation
-    let isMouseDown = false;
-
-    const handleMouseDown = (event: MouseEvent) => {
-      const rect = renderer.domElement.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      
-      if (x >= 0 && x <= WIDTH && y >= 0 && y <= HEIGHT) {
-        isMouseDown = true;
-        uniforms.mouse.value.set(
-          x / WIDTH,
-          1.0 - y / HEIGHT
-        );
-      }
-    };
-
-    const handleMouseUp = () => {
-      isMouseDown = false;
-    };
-
-    const handleMouseMove = (event: MouseEvent) => {
-      if (isMouseDown) {
-        const rect = renderer.domElement.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        
-        uniforms.mouse.value.set(
-          x / WIDTH,
-          1.0 - y / HEIGHT
-        );
-      }
-    };
-
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('mousemove', handleMouseMove);
-
     // Cleanup
     return () => {
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -538,13 +530,16 @@ const SkyShader = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div 
-        ref={containerRef}
-        className="rounded-lg overflow-hidden shadow-lg"
-        style={{ width: '600px', height: '400px' }}
-      />
-    </div>
+    <div 
+      ref={containerRef}
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}
+    />
   );
 };
 
