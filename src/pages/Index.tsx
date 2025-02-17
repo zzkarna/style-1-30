@@ -1,5 +1,6 @@
 
 import SkyShader from "@/components/SkyShader";
+import { Info, Image, Settings, Share2, Download, HelpCircle, Copyright } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -7,11 +8,17 @@ const Index = () => {
       {/* Top Navigation Bar */}
       <nav className="w-full bg-gray-100 p-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">Dreamy Sky Shader</h1>
-          <div className="flex gap-4">
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">About</button>
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">Gallery</button>
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">Settings</button>
+          <h1 className="text-3xl font-bold" style={{ fontFamily: 'Bebas Neue Bitter' }}>ella</h1>
+          <div className="flex gap-6">
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <Info size={24} />
+            </button>
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <Image size={24} />
+            </button>
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <Settings size={24} />
+            </button>
           </div>
         </div>
       </nav>
@@ -29,13 +36,21 @@ const Index = () => {
       {/* Bottom Bar */}
       <div className="w-full bg-gray-100 p-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex gap-4">
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">Share</button>
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">Download</button>
+          <div className="flex gap-6">
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <Share2 size={24} />
+            </button>
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <Download size={24} />
+            </button>
           </div>
-          <div className="flex gap-4">
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">Help</button>
-            <button className="px-4 py-2 hover:bg-gray-200 rounded-md">Credits</button>
+          <div className="flex gap-6">
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <HelpCircle size={24} />
+            </button>
+            <button className="p-2 hover:bg-gray-200 rounded-md">
+              <Copyright size={24} />
+            </button>
           </div>
         </div>
       </div>
