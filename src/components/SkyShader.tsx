@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -27,8 +28,8 @@ const SkyShader = () => {
     camera.position.z = 1;
     
     // Set fixed size to match frame dimensions
-    const WIDTH = 800;
-    const HEIGHT = 600;
+    const WIDTH = 400; // Reduced from 800 to 400
+    const HEIGHT = 300; // Reduced from 600 to 300
     
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(WIDTH, HEIGHT);
