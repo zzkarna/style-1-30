@@ -26,8 +26,10 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-8">
-        <div className="relative w-[400px] h-[400px] border-[10px] border-black rounded-sm overflow-hidden">
-          <SkyShader />
+        <div className="relative bg-white p-4 pb-16 shadow-xl" style={{ width: '440px' }}>
+          <div className="relative w-[400px] h-[400px] overflow-hidden">
+            <SkyShader />
+          </div>
         </div>
       </div>
 
