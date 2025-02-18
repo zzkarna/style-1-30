@@ -20,7 +20,7 @@ const Index = () => {
                 alt="Logo" 
                 className="h-16 md:h-24 w-auto mb-2"
               />
-              <span className="absolute top-0 right-0 text-white text-xs">™</span>
+              <span className="absolute bottom-0 right-0 text-white text-xs">®</span>
             </div>
             <EllaNav />
           </div>
