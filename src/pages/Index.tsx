@@ -1,4 +1,3 @@
-
 import SkyShader from "@/components/SkyShader";
 import { Search, User, ShoppingBag, Facebook, Instagram, Twitter } from 'lucide-react';
 import EllaNav from "@/components/EllaNav";
@@ -43,12 +42,11 @@ const Index = () => {
       {/* Bottom Bar */}
       <div className="w-full bg-black p-4 md:p-8">
         <div className="max-w-7xl mx-auto mb-8 md:mb-12">
-          <h2 className="text-xl md:text-2xl font-bold text-white text-center mb-2" style={{ fontFamily: 'Bitter' }}>never miss a drop</h2>
-          <p className="text-sm md:text-base text-white text-center mb-6" style={{ fontFamily: 'Bitter' }}>subscribe and get the latest news.</p>
+          <p className="text-sm md:text-base text-white text-center mb-6" style={{ fontFamily: 'Bitter' }}>subscribe</p>
           <div className="flex max-w-lg mx-auto px-4 md:px-0">
             <input 
               type="email" 
-              placeholder="enter your email address"
+              placeholder="join"
               className="flex-1 p-2 border border-gray-700 bg-black text-white text-sm md:text-base"
               style={{ fontFamily: 'Bitter' }}
             />
@@ -67,10 +65,6 @@ const Index = () => {
           <button className="hover:text-gray-400">terms</button>
           <span className="text-gray-600 hidden md:inline">•</span>
           <button className="hover:text-gray-400">faq</button>
-          <span className="text-gray-600 hidden md:inline">•</span>
-          <button className="hover:text-gray-400">terms of service</button>
-          <span className="text-gray-600 hidden md:inline">•</span>
-          <button className="hover:text-gray-400">refund policy</button>
           <span className="text-gray-600 hidden md:inline">•</span>
           <button className="hover:text-gray-400 text-center">do not sell my personal information</button>
         </div>
