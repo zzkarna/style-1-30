@@ -48,7 +48,7 @@ const Index = () => {
             <div className="flex flex-1">
               <input 
                 type="email" 
-                placeholder="join"
+                placeholder="enter email"
                 className="flex-1 p-2 border border-gray-700 bg-black text-white text-sm md:text-base"
                 style={{ fontFamily: 'Bitter' }}
               />
