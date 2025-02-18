@@ -31,7 +31,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-8">
-        <div className="relative w-[200px] h-[200px] overflow-hidden">
+        <div className="relative w-[470px] h-[200px] overflow-hidden">
           <SkyShader />
         </div>
       </div>
