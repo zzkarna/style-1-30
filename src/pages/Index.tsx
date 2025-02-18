@@ -9,7 +9,7 @@ const Index = () => {
       {/* Top Navigation Bar */}
       <nav className="w-full bg-black px-4 md:px-8 py-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end pb-4" style={{ fontFamily: 'Bitter' }}>
-          <div className="w-full md:w-1/3 flex justify-center md:justify-start gap-6 mb-4 md:mb-0">
+          <div className="hidden md:flex w-1/3 justify-start gap-6">
             <button className="text-sm text-white hover:text-gray-300">shop</button>
             <button className="text-sm text-white hover:text-gray-300">gallery</button>
           </div>
@@ -22,6 +22,10 @@ const Index = () => {
             <EllaNav />
           </div>
           <div className="w-full md:w-1/3 flex justify-center md:justify-end gap-6">
+            <div className="md:hidden flex gap-6">
+              <button className="text-sm text-white hover:text-gray-300">shop</button>
+              <button className="text-sm text-white hover:text-gray-300">gallery</button>
+            </div>
             <button className="text-sm text-white hover:text-gray-300">explore</button>
             <button className="text-sm text-white hover:text-gray-300">profile</button>
             <button className="text-sm text-white hover:text-gray-300">bag (0)</button>
@@ -31,7 +35,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4 md:p-8">
-        <div className="relative w-full md:w-[470px] h-[140px] md:h-[200px] overflow-hidden mx-auto">
+        <div className="relative w-full md:w-[600px] h-[140px] md:h-[300px] overflow-hidden mx-auto">
           <SkyShader />
         </div>
       </div>
