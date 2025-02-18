@@ -14,13 +14,13 @@ const Index = () => {
             <button className="text-sm text-white hover:text-gray-300">gallery</button>
           </div>
           <div className="w-full md:w-1/3 flex justify-center flex-col items-center mb-4 md:mb-0">
-            <div className="relative">
+            <div className="relative flex items-center">
               <img 
                 src="/lovable-uploads/a5d84068-b2d2-428c-9771-6c6632ed32e5.png" 
                 alt="Logo" 
                 className="h-16 md:h-24 w-auto mb-2"
               />
-              <span className="absolute bottom-0 right-0 text-white text-xs -mb-1 mr-0">®</span>
+              <span className="text-white text-[10px] translate-y-[2px] -ml-2">®</span>
             </div>
             <EllaNav />
           </div>
