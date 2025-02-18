@@ -2,6 +2,7 @@
 import SkyShader from "@/components/SkyShader";
 import { Search, User, ShoppingBag, Facebook, Instagram, Twitter } from 'lucide-react';
 import EllaNav from "@/components/EllaNav";
+import NavButton from "@/components/NavButton";
 
 const Index = () => {
   return (
@@ -10,8 +11,8 @@ const Index = () => {
       <nav className="w-full bg-black px-4 md:px-8 py-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end pb-4" style={{ fontFamily: 'Bitter' }}>
           <div className="hidden md:flex w-1/3 justify-start gap-6">
-            <button className="text-sm text-white hover:text-gray-300">shop</button>
-            <button className="text-sm text-white hover:text-gray-300">gallery</button>
+            <NavButton>shop</NavButton>
+            <NavButton>gallery</NavButton>
           </div>
           <div className="w-full md:w-1/3 flex justify-center flex-col items-center mb-4 md:mb-0">
             <div className="relative flex items-center">
@@ -26,12 +27,12 @@ const Index = () => {
           </div>
           <div className="w-full md:w-1/3 flex justify-center md:justify-end gap-6">
             <div className="md:hidden flex gap-6">
-              <button className="text-sm text-white hover:text-gray-300">shop</button>
-              <button className="text-sm text-white hover:text-gray-300">gallery</button>
+              <NavButton>shop</NavButton>
+              <NavButton>gallery</NavButton>
             </div>
-            <button className="text-sm text-white hover:text-gray-300">search</button>
-            <button className="text-sm text-white hover:text-gray-300">profile</button>
-            <button className="text-sm text-white hover:text-gray-300">bag (0)</button>
+            <NavButton>search</NavButton>
+            <NavButton>profile</NavButton>
+            <NavButton>bag (0)</NavButton>
           </div>
         </div>
       </nav>
