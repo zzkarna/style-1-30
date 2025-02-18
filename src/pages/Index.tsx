@@ -1,3 +1,4 @@
+
 import SkyShader from "@/components/SkyShader";
 import { Search, User, ShoppingBag, Facebook, Instagram, Twitter } from 'lucide-react';
 import EllaNav from "@/components/EllaNav";
@@ -42,17 +43,19 @@ const Index = () => {
       {/* Bottom Bar */}
       <div className="w-full bg-black p-4 md:p-8">
         <div className="max-w-7xl mx-auto mb-8 md:mb-12">
-          <p className="text-sm md:text-base text-white text-center mb-6" style={{ fontFamily: 'Bitter' }}>subscribe</p>
-          <div className="flex max-w-lg mx-auto px-4 md:px-0">
-            <input 
-              type="email" 
-              placeholder="join"
-              className="flex-1 p-2 border border-gray-700 bg-black text-white text-sm md:text-base"
-              style={{ fontFamily: 'Bitter' }}
-            />
-            <button className="px-4 py-2 bg-black border border-l-0 border-gray-700 text-white">
-              →
-            </button>
+          <div className="flex max-w-lg mx-auto items-center px-4 md:px-0 gap-4">
+            <p className="text-sm md:text-base text-white whitespace-nowrap" style={{ fontFamily: 'Bitter' }}>subscribe</p>
+            <div className="flex flex-1">
+              <input 
+                type="email" 
+                placeholder="join"
+                className="flex-1 p-2 border border-gray-700 bg-black text-white text-sm md:text-base"
+                style={{ fontFamily: 'Bitter' }}
+              />
+              <button className="px-4 py-2 bg-black border border-l-0 border-gray-700 text-white">
+                →
+              </button>
+            </div>
           </div>
         </div>
 
